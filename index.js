@@ -135,6 +135,14 @@ class instance extends instance_skel {
 				label: 'Power Off Display',
 				options: [],
 			},
+			inputHDMI1: {
+				label: 'Set input to HDMI1',
+				options: [],
+			},
+			inputHDMI2: {
+				label: 'Set input to HDMI2',
+				options: [],
+			}
 		})
 	}
 
@@ -146,35 +154,69 @@ class instance extends instance_skel {
 			// response aa ff 01 03 41 11 01 56
 			case 'powerOn':
 				cmd = Buffer.from([
-					'0xAA',
-					'0x11',
-					'0x01',
-					'0x01',
-					'0x01',
-					'0x14',
-					'0xAA',
-					'0x11',
-					'0xFE',
-					'0x01',
-					'0x01',
-					'0x11',
+					'0xAA', //Header
+					'0x11', //Command
+					'0x01', //ID
+					'0x01', //DataLength
+					'0x01', //Data
+					'0x14', //Checksum
+					'0xAA', //Header
+					'0x11', //Command
+					'0xFE', //ID - 0xFE is a wildcard for the device to pass on to all others connected via serial
+					'0x01', //DataLength
+					'0x01', //Data - Power on = 1, Power off = 2
+					'0x11', //Checksum
 				], 'latin1')
 				break
 			case 'powerOff':
 			// response  aa ff 01 03 41 11 00 55
 				cmd = Buffer.from([
-					'0xAA',
-					'0x11',
-					'0x01',
-					'0x01',
-					'0x00',
-					'0x13',
-					'0xAA',
-					'0x11',
-					'0xFE',
-					'0x01',
-					'0x00',
-					'0x10',
+					'0xAA', //Header
+					'0x11', //Command
+					'0x01', //ID
+					'0x01', //DataLength
+					'0x00', //Data
+					'0x13', //Checksum
+					'0xAA', //Header
+					'0x11', //Command
+					'0xFE', //ID - 0xFE is a wildcard for the device to pass on to all others connected via serial
+					'0x01', //DataLength
+					'0x00', //Data - Power on = 1, Power off = 2
+					'0x10', //Checksum
+				], 'latin1')
+				break
+			case 'inputHDMI1':
+			// response  aa ff 01 03 41 11 00 55
+				cmd = Buffer.from([
+					'0xAA', //Header
+					'0x14', //Command
+					'0x01', //ID
+					'0x01', //DataLength
+					'0x21', //Data
+					'0x37', //Checksum
+					'0xAA', //Header
+					'0x14', //Command
+					'0xFE', //ID - 0xFE is a wildcard for the device to pass on to all others connected via serial
+					'0x01', //DataLength
+					'0x21', //Data - HDMI1 = 0x21
+					'0x34', //Checksum
+				], 'latin1')
+				break
+			case 'inputHDMI2':
+			// response  aa ff 01 03 41 11 00 55
+				cmd = Buffer.from([
+					'0xAA', //Header
+					'0x14', //Command
+					'0x01', //ID
+					'0x01', //DataLength
+					'0x23', //Data
+					'0x39', //Checksum
+					'0xAA', //Header
+					'0x14', //Command
+					'0xFE', //ID - 0xFE is a wildcard for the device to pass on to all others connected via serial
+					'0x01', //DataLength
+					'0x23', //Data - HDMI1 = 0x21
+					'0x40', //Checksum
 				], 'latin1')
 				break
 		}
